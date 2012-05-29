@@ -1,6 +1,6 @@
 # useDynLib(spcopula)
 
-import(RNetCDF, spacetime)
+import(RNetCDF, spacetime, rgdal)
 
 # general functions
 export(readUNetCDF, writeUNetCDF)

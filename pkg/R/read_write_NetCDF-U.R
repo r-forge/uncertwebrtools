@@ -1,7 +1,3 @@
-library(RNetCDF)
-library(spacetime)
-library(rgdal)
-
 readUNetCDF <- function(file,x="lon",y="lat",time=NULL, variables=NULL, projection=NULL, realisation=NULL){
   uncdf <- open.nc(file, write=T)
   xdim <- var.get.nc(uncdf, x)
@@ -142,15 +138,15 @@ readUNetCDF <- function(file,x="lon",y="lat",time=NULL, variables=NULL, projecti
   }
   return(df)
 }
-
-str(spdf@sp)
-
-data <- as(EU_june,"STFDF")
-newfile <- "~/EU_June.nc"
-
-file.inq.nc(newUncdf)
-
-str(unprojGrid)
+# 
+# str(spdf@sp)
+# 
+# data <- as(EU_june,"STFDF")
+# newfile <- "~/EU_June.nc"
+# 
+# file.inq.nc(newUncdf)
+# 
+# str(unprojGrid)
 
 
 selectType <- function(data) {
