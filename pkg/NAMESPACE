@@ -1,0 +1,15 @@
+# useDynLib(spcopula)
+
+import(RNetCDF, spacetime)
+
+# general functions
+export(readUNetCDF, writeUNetCDF)
+
+## exportClasses(mvdc) ## S4 methods
+## exportMethods(persp, contour)
+## S3method(print, indepTest)
+## importClassesFrom(package, ...)
+## importMethodsFrom(package, ...)
+
+
+

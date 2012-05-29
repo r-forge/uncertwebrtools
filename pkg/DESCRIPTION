@@ -1,0 +1,14 @@
+Package: UncertWeb
+Type: Package
+Title: collection of usefull R functions in ifgi's UncertWeb part
+Version: 1.0-1
+Date: 2012-01-30
+Author: Benedikt Graeler
+Maintainer: Benedikt Graeler <ben.graeler@uni-muenster.de>
+Description: By now, reading and writing some UNetCDF files
+License: What license is it under?
+LazyLoad: yes
+Depends: RNetCDF, spacetime, R (>= 2.11.0)
+URL: ifgi.uni-muenster.de/graeler
+Collate:
+  read_write_UNetCDF.R
