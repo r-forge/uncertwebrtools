@@ -1,12 +1,12 @@
-source('C:/Users/sony/Desktop/Rapi/root/schemaReader/pkg/R/read.schema.R')
+source('C:/Users/sony/Desktop/XML_Schema_Reader/pkg/R/read.schema.R')
 library("rjson")
 library("XML")
-f <- "C:/Users/sony/Desktop/Rapi/root/schemaReader/pkg/data/uncertml.xsd"
+f <- "C:/Users/sony/Desktop/XML_Schema_Reader/pkg/data/uncertml.xsd"
 doc=xmlParse(f)
 ns <- c(un="http://www.uncertml.org/2.0",xs="http://www.w3.org/2001/XMLSchema")
 logLevel=1
 file<-"C:/Users/sony/Desktop/test.txt"
-xfile<-"C:/Users/sony/Desktop/testxml.txt"
+xfile<-"C:/Users/sony/Desktop/testx.txt"
 
 validateElements<-function(elDetails, sValue)
 {
@@ -107,6 +107,7 @@ readFromJSON<-function(file)
   rData<-fromJSON(paste(readLines(file)))
   eName<-names(rData)[[1]]
 #get Element name in eName and create an object
+  eObject<-new(Class=eName)
   result <- getAttributesAndElementsForElementName(eName, doc, ns)
   for (elDetails in result$subelements)
   {
@@ -114,7 +115,7 @@ readFromJSON<-function(file)
 	  sValue<-rData[[eName]][[sName]]
     if(validateElements(elDetails, sValue))
     {
-      eObject[[sName]]<-sValue
+      slot(eObject, sName)<-sValue
     }
  	}
   for (elDetails in result$attributes)
@@ -123,7 +124,7 @@ readFromJSON<-function(file)
     sValue<-rData[[eName]][[sName]]
     if(validateAttributes(elDetails, sValue))
     {
-      eObject[[sName]]<-sValue
+      slot(eObject, sName)<-sValue
     }
   }
   
@@ -231,11 +232,12 @@ writeToJSON<-function(.Object, file)
 
 readFromXML<-function(xfile)
 {
-  xdata<-xmlTreeParse(file, getDTD=FALSE)  
+  xdata<-xmlTreeParse(xfile, getDTD=FALSE)  
   en<-xmlRoot(xdata)
   eName<-xmlName(en)
   eList<-xmlToList(en)
   #create an object eObject
+  eObject<-new(Class=eName)
   result <- getAttributesAndElementsForElementName(eName, doc, ns)
   for (attr in result$attributes)
   {
@@ -243,16 +245,16 @@ readFromXML<-function(xfile)
     sValue<-xmlGetAttr(en, sName)
     if(validateAttributes(attr, sValue))
     {
-      eObject[[sName]]<-sValue
+      slot(eObject,sName)<-sValue
     }     
   }
   for(elDetails in result$subelements)
   {
     sName<-elDetails$name
-    sValue<-eList[[sName]]
-    if(validate(elDetails, sValue))
+    sValue<-as(eList[[sName]], elDetails$type)
+    if(validateElements(elDetails, sValue))
     {
-      eObject[[sName]] <- sValue
+      slot(eObject,sName) <- sValue
     }
   }
   return(eObject)
