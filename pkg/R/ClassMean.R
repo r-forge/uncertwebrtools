@@ -14,12 +14,12 @@ setMethod(
   )
 
 setGeneric(
-  name="getValues",
-  def=function(.Object){standardGeneric("getValues")}
+  name="getMeanValues",
+  def=function(.Object){standardGeneric("getMeanValues")}
   )
 
 setMethod(
-  f="getValues",
+  f="getMeanValues",
   signature="Mean",
   definition=function(.Object)
     {
@@ -28,12 +28,12 @@ setMethod(
   )
 
 setGeneric(
-  name="getCount",
-  def=function(.Object){standardGeneric("getCount")}
+  name="getMeanValueCount",
+  def=function(.Object){standardGeneric("getMeanValueCount")}
   )
 
 setMethod(
-  f="getCount",
+  f="getMeanValueCount",
   signature="Mean",
   definition=function(.Object)
     {
@@ -42,16 +42,16 @@ setMethod(
   )
 
 setGeneric(
-  name="addValues<-"
-  def=function(.Object, val){standardGeneric("addValues<-")}
+  name="addMeanValues<-",
+  def=function(.Object, val){standardGeneric("addMeanValues<-")}
   )
 
 setReplaceMethod(
-  f="addValues",
+  f="addMeanValues",
   signature="Mean",
   definition=function(.Object, val)
     {
-      .Object@values<-c(values, val)
+      .Object@values<-c(.Object@values, val)
       return(.Object)   
     }
   )
