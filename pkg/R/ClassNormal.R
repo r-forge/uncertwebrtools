@@ -1,4 +1,3 @@
-source('~/R/validate.R')
 setClass(
   Class="NormalDistribution",
   representation=representation(mean="numeric", variance="numeric")

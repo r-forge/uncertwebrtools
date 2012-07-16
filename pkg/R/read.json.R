@@ -106,7 +106,6 @@ readFromJSON<-function(file)
 {
   rData<-fromJSON(paste(readLines(file)))
   eName<-names(rData)[[1]]
-#get Element name in eName and create an object
   eObject<-new(Class=eName)
   result <- getAttributesAndElementsForElementName(eName, doc, ns)
   for (elDetails in result$subelements)
@@ -262,5 +261,36 @@ readFromXML<-function(xfile)
 
 writeToXML<-function(.Object, file)
 {
-  
+  eName<-class(.Object)[1]
+  ns<-getNamespaceDefinitions(f)
+  result <- getAttributesAndElementsForElementName(eName, doc, ns)
+  attrsList<-c()
+  for (elDetails in result$attributes)
+  {
+    sName<-elDetails$name
+    sValue<-slot(.Object, sName)
+    if(validateAttributes(elDetails, sValue))
+    {
+      attrsList<-c(attrsList, sName=sValue)
+    }
+    else
+    {
+        stop(paste("Invalid value for the attribute", sName, "-", sValue))
+    }          
+  }
+  eNode<-xmlNode(eName, attrs=attrsList, namespace="un", ns)
+  for (elDetails in result$subelements)
+  {
+    sName<-elDetails$name
+    sValue<-slot(.Object, sName)
+    if(validateElements(elDetails, sValue))
+    {
+      cNode<-xmlNode(sName, namespace="un", sValue)
+      addChildren(eNode, cNode)
+    }
+    else
+    {
+      stop(paste("Invalid value for slot", sName, "-", sValue))
+    }          
+  }  
 }
