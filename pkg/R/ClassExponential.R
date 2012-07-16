@@ -8,14 +8,13 @@ setMethod(
   signature="ExponentialDistribution",
   definition=function(.Object, rate){
     .Object@rate<-rate
-    #validObject(.Object)
     return(.Object)
   }
   )
 
 setGeneric(
   name="getExponentialRate",
-  def=function(.Object) {standardGeneric("getRate")}
+  def=function(.Object) {standardGeneric("getExponentialRate")}
   )
 
 setMethod(
@@ -28,21 +27,21 @@ setMethod(
 
 setGeneric(
   name="setExponentialRate<-",
-  def=function(.Object,Value){standardGeneric("setRate<-")}
+  def=function(.Object,value){standardGeneric("setExponentialRate<-")}
   )
 
 setReplaceMethod(
   f="setExponentialRate",
   signature="ExponentialDistribution",
-  definition=function(.Object,Value){
-    .Object@rate<-Value
+  definition=function(.Object,value){
+    .Object@rate<-value
     return(.Object)
   }
   )
 
 setGeneric(
   name="getExponentialSamples",
-  def=function(.Object,number) {standardGeneric("getSamples")}
+  def=function(.Object,number) {standardGeneric("getExponentialSamples")}
   )
 
 setMethod(
@@ -56,5 +55,104 @@ setMethod(
     }
     rsample<-new(Class="RandomSample", temp)
     return(rsample)
+  }
+  )
+
+setGeneric(
+  name="getExponentialMean",
+  def=function(.Object){standardGeneric("getExponentialMean")}
+  )
+
+setMethod(
+  f="getExponentialMean",
+  signature="ExponentialDistribution",
+  definition=function(.Object)
+  {
+    return(1/.Object@rate)  
+  }
+  )
+
+setGeneric(
+  name="getExponentialVariance",
+  def=function(.Object){standardGeneric("getExponentialVariance")}
+  )
+
+setMethod(
+  f="getExponentialVariance",
+  signature="ExponentialDistribution",
+  definition=function(.Object)
+  {
+    return((1/.Object@rate)^2)  
+  }
+  )
+
+setGeneric(
+    name="getExponentialStandardDeviation",
+    def=function(.Object){standardGeneric("getExponentialStandardDeviation")}
+    )
+
+setMethod(
+  f="getExponentialStandardDeviation",
+  signature="ExponentialDistribution",
+  definition=function(.Object)
+  {
+    var<-getExponentialVariance(.Object)
+    return(sqrt(var))  
+  }
+  )
+
+setGeneric(
+    name="getExponentialMode",
+    def=function(.Object){standardGeneric("getExponentialMode")}
+    )
+
+setMethod(
+  f="getExponentialMode",
+  signature="ExponentialDistribution",
+  definition=function(.Object)
+  {
+    return(0)  
+  }
+  )
+
+setGeneric(
+    name="getExponentialMedian",
+    def=function(.Object){standardGeneric("getExponentialMedian")}
+    )
+
+setMethod(
+  f="getExponentialMedian",
+  signature="ExponentialDistribution",
+  definition=function(.Object)
+  {
+    return(log(2)/.Object@rate)  
+  }
+  )
+
+setGeneric(
+    name="getExponentialSkewness",
+    def=function(.Object){standardGeneric("getExponentialSkewness")}
+    )
+
+setMethod(
+  f="getExponentialSkewness",
+  signature="ExponentialDistribution",
+  definition=function(.Object)
+  {
+    return(2)  
+  }
+  )
+
+setGeneric(
+  name="getExponentialKurtosis",
+  def=function(.Object){standardGeneric("getExponentialKurtosis")}
+  )
+
+setMethod(
+  f="getExponentialKurtosis",
+  signature="ExponentialDistribution",
+  definition=function(.Object)
+  {
+    return(6)  
   }
   )

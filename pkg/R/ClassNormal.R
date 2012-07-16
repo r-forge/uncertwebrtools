@@ -1,9 +1,7 @@
 source('~/R/validate.R')
 setClass(
   Class="NormalDistribution",
-  representation=representation(mean="numeric", variance="numeric"),
-  validity=validND,
-#  contains="UncertML"
+  representation=representation(mean="numeric", variance="numeric")
   )
 
 setMethod(
@@ -17,15 +15,9 @@ setMethod(
   }
   )
 
-# setValidity(
-#   Class="NormalDistribution",
-#   #validReal(.Object@variance)
-#   validND()
-#   )
-
 setGeneric(
   name="getNormalMean",
-  def=function(.Object) {standardGeneric("getMean")}
+  def=function(.Object) {standardGeneric("getNormalMean")}
   )
 
 setMethod(
@@ -38,7 +30,7 @@ setMethod(
 
 setGeneric(
   name="getNormalVariance",
-  def=function(.Object) {standardGeneric("getVariance")}
+  def=function(.Object) {standardGeneric("getNormalVariance")}
   )
 
 setMethod(
@@ -51,35 +43,35 @@ setMethod(
 
 setGeneric(
   name="setNormalMean<-",
-  def=function(.Object,Value){standardGeneric("setMean<-")}
+  def=function(.Object,value){standardGeneric("setNormalMean<-")}
   )
 
 setReplaceMethod(
   f="setNormalMean",
   signature="NormalDistribution",
-  definition=function(.Object,Value){
-    .Object@mean<-Value
+  definition=function(.Object,value){
+    .Object@mean<-value
     return(.Object)
   }
   )
 
 setGeneric(
   name="setNormalVariance<-",
-  def=function(.Object,Value){standardGeneric("setVariance<-")}
+  def=function(.Object,value){standardGeneric("setNormalVariance<-")}
   )
 
 setReplaceMethod(
   f="setNormalVariance",
   signature="NormalDistribution",
-  definition=function(.Object,Value){
-    .Object@variance<-Value
+  definition=function(.Object,value){
+    .Object@variance<-value
     return(.Object)
   }
   )
 
 setGeneric(
   name="getNormalSamples",
-  def=function(.Object,number) {standardGeneric("getSamples")}
+  def=function(.Object,number) {standardGeneric("getNormalSamples")}
   )
 
 setMethod(
@@ -94,58 +86,6 @@ setMethod(
     rsample<-new(Class="RandomSample", temp)
     return(rsample)
   }
-  )
-# 
-# setGeneric(
-#   name="writeToJSON",
-#   def=function(.Object, file){standardGeneric("writeToJSON")}
-#   )
-# 
-# setMethod(
-#   f="writeToJSON",
-#   signature="NormalDistribution",
-#   definition=function(.Object, file){
-#     Class=class(.Object)[1]
-#     Slots=slotNames(Class)
-#     obj<-list()
-#     for(i in 1:length(Slots)){
-#       obj[[Slots[[i]]]]<-slot(.Object, Slots[[i]])
-#     }
-#     rdata<-list()
-#     rdata[[Class]]=obj
-#     #return(obj)
-#     library("rjson")
-#     write(toJSON(rdata), file)
-#   }
-#   )
-
-setGeneric(
-  name="readFromXML",
-  def=function(.Object, file){standardGeneric("readFromXML")}
-  )
-
-setMethod(
-  f="readFromXML",
-  signature="NormalDistribution",
-  definition=function(.Object, file){
-    library("XML")
-    xdata<-xmlTreeParse(file, getDTD=FALSE)
-    root<-xmlRoot(xdata)
-    className<-xmlName(root)
-    mean<-as.numeric(xmlValue(root[[1]]))
-    variance<-as.numeric(xmlValue(root[[2]]))
-    .Object@mean<-mean
-    .Object@variance<-variance
-    detach("package:XML")
-    return(.Object)
-#     slots<-list()
-#     for (i in 1:xmlSize(root)){
-#       slots[xmlName(root[[i]])]<-root[[i]][1]
-#     }
-#     rdata<-list()
-#     rdata[[className]]=slots
-#     return(rdata)
-  }  
   )
 
 setGeneric(
@@ -164,5 +104,76 @@ setMethod(
                   xmlNode("un:variance", .Object@variance))
     write(toString(data), file)    
     detach("package:XML")
+  }
+  )
+
+setGeneric(
+  name="getNormalStandardDeviation",
+  def=function(.Object){standardGeneric("getNormalStandardDeviation")}
+  )
+
+setMethod(
+  f="getNormalStandardDeviation",
+  signature="NormalDistribution",
+  definition=function(.Object)
+  {
+    var<-getNormalVariance(.Object)
+    return(sqrt(var))  
+  }
+  )
+
+setGeneric(
+  name="getNormalMode",
+  def=function(.Object){standardGeneric("getNormalMode")}
+  )
+
+setMethod(
+  f="getNormalMode",
+  signature="NormalDistribution",
+  definition=function(.Object)
+  {
+    return(.Object@mean)  
+  }
+  )
+
+setGeneric(
+  name="getNormalMedian",
+  def=function(.Object){standardGeneric("getNormalMedian")}
+  )
+
+setMethod(
+  f="getNormalMedian",
+  signature="NormalDistribution",
+  definition=function(.Object)
+  {
+    return(.Object@mean)  
+  }
+  )
+
+setGeneric(
+  name="getNormalSkewness",
+  def=function(.Object){standardGeneric("getNormalSkewness")}
+  )
+
+setMethod(
+  f="getNormalSkewness",
+  signature="NormalDistribution",
+  definition=function(.Object)
+  {
+    return(0)  
+  }
+  )
+
+setGeneric(
+  name="getNormalKurtosis",
+  def=function(.Object){standardGeneric("getNormalKurtosis")}
+  )
+
+setMethod(
+  f="getNormalKurtosis",
+  signature="NormalDistribution",
+  definition=function(.Object)
+  {
+    return(0)  
   }
   )

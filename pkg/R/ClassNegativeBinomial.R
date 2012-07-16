@@ -1,6 +1,6 @@
 setClass(
   Class="NegativeBinomialDistribution",
-  representation=representation(numberOfFailures="integer", probability="numeric")
+  representation=representation(numberOfFailures="numeric", probability="numeric")
   )
 
 setMethod(
@@ -9,18 +9,17 @@ setMethod(
   definition=function(.Object, failures, probability){
     .Object@numberOfFailures<-failures
     .Object@probability<-probability
-    #validObject(.Object)
     return(.Object)
   }
   )
 
 setGeneric(
-  name="getNegativeBinomialNumberOfFailures",
-  def=function(.Object) {standardGeneric("getNumberOfFailures")}
+  name="getNegBinomNumberOfFailures",
+  def=function(.Object) {standardGeneric("getNegBinomNumberOfFailures")}
   )
 
 setMethod(
-  f="getNegativeBinomialNumberOfFailures",
+  f="getNegBinomNumberOfFailures",
   signature="NegativeBinomialDistribution",
   definition=function(.Object){
     return(.Object@numberOfFailures)
@@ -28,12 +27,12 @@ setMethod(
   )
 
 setGeneric(
-  name="getNegativeBinomialProbability",
-  def=function(.Object) {standardGeneric("getProbability")}
+  name="getNegBinomProbability",
+  def=function(.Object) {standardGeneric("getNegBinomProbability")}
   )
 
 setMethod(
-  f="getNegativeBinomialProbability",
+  f="getNegBinomProbability",
   signature="NegativeBinomialDistribution",
   definition=function(.Object){
     return(.Object@probability)
@@ -41,48 +40,150 @@ setMethod(
   )
 
 setGeneric(
-  name="setNegativeBinomialNumberOfFailures<-",
-  def=function(.Object,Value){standardGeneric("setNumberOfFailures<-")}
+  name="setNegBinomNumberOfFailures<-",
+  def=function(.Object,value){standardGeneric("setNegBinomNumberOfFailures<-")}
   )
 
 setReplaceMethod(
-  f="setNegativeBinomialNumberOfFailures",
+  f="setNegBinomNumberOfFailures",
   signature="NegativeBinomialDistribution",
-  definition=function(.Object,Value){
-    .Object@numberOfFailures<-Value
+  definition=function(.Object,value){
+    .Object@numberOfFailures<-value
     return(.Object)
   }
   )
 
 setGeneric(
-  name="setNegativeBinomialProbability<-",
-  def=function(.Object,Value){standardGeneric("setProbability<-")}
+  name="setNegBinomProbability<-",
+  def=function(.Object,value){standardGeneric("setNegBinomProbability<-")}
   )
 
 setReplaceMethod(
-  f="setNegativeBinomialProbability",
+  f="setNegBinomProbability",
   signature="NegativeBinomialDistribution",
-  definition=function(.Object,Value){
-    .Object@probability<-Value
+  definition=function(.Object,value){
+    .Object@probability<-value
     return(.Object)
   }
   )
 
 setGeneric(
-  name="getNegativeBinomialSamples",
-  def=function(.Object,number) {standardGeneric("getSamples")}
+  name="getNegBinomSamples",
+  def=function(.Object,number) {standardGeneric("getNegBinomSamples")}
   )
 
 setMethod(
-  f="getNegativeBinomialSamples",
+  f="getNegBinomSamples",
   signature="NegativeBinomialDistribution",
   definition=function(.Object, number){
-    sample<-rnbinom(number, .Object@numberOfFailures, .Object@probabilityOfSuccess)
+    sample<-rnbinom(number, .Object@numberOfFailures, .Object@probability)
     temp<-c()
     for(i in 1:length(sample)){
       temp<-c(temp, new(Class="Realisation", Value=as.double(sample[i]), Id=i, Weight=1/number))
     }
     rsample<-new(Class="RandomSample", temp)
     return(rsample)
+  }
+  )
+
+setGeneric(
+  name="getNegBinomMean",
+  def=function(.Object){standardGeneric("getNegBinomMean")}
+  )
+
+setMethod(
+  f="getNegBinomMean",
+  signature="NegativeBinomialDistribution",
+  definition=function(.Object)
+  {
+    r<-.Object@numberOfFailures
+    p<-.Object@probability
+    return(p*r/(1-p))  
+  }
+  )
+
+setGeneric(
+  name="getNegBinomVariance",
+  def=function(.Object){standardGeneric("getNegBinomVariance")}
+  )
+
+setMethod(
+  f="getNegBinomVariance",
+  signature="NegativeBinomialDistribution",
+  definition=function(.Object)
+  {
+    r<-.Object@numberOfFailures
+    p<-.Object@probability
+    return(p*r/((1-p)^2))  
+  }
+  )
+
+setGeneric(
+  name="getNegBinomStandardDeviation",
+  def=function(.Object){standardGeneric("getNegBinomStandardDeviation")}
+  )
+
+setMethod(
+  f="getNegBinomStandardDeviation",
+  signature="NegativeBinomialDistribution",
+  definition=function(.Object)
+  {
+    var<-getNegativeBinomialVariance(.Object)
+    return(sqrt(var))  
+  }
+  )
+
+setGeneric(
+  name="getNegBinomMode",
+  def=function(.Object){standardGeneric("getNegBinomMode")}
+  )
+
+setMethod(
+  f="getNegBinomMode",
+  signature="NegativeBinomialDistribution",
+  definition=function(.Object)
+  {
+    r<-.Object@numberOfFailures
+    p<-.Object@probability
+    if(r>1)
+    {
+      return(floor((p*(r-1))/(1-p)))
+    }
+    else
+    {
+      return(0)  
+    }
+  }
+  )
+
+setGeneric(
+  name="getNegBinomSkewness",
+  def=function(.Object){standardGeneric("getNegBinomSkewness")}
+  )
+
+setMethod(
+  f="getNegBinomSkewness",
+  signature="NegativeBinomialDistribution",
+  definition=function(.Object)
+  {
+    r<-.Object@numberOfFailures
+    p<-.Object@probability
+    return((p+1)/sqrt(p*r))  
+  }
+  )
+
+setGeneric(
+  name="getNegBinomKurtosis",
+  def=function(.Object){standardGeneric("getNegBinomKurtosis")}
+  )
+
+setMethod(
+  f="getNegBinomKurtosis",
+  signature="NegativeBinomialDistribution",
+  definition=function(.Object)
+  {
+    r<-.Object@numberOfFailures
+    p<-.Object@probability
+    return((6/r)+(((1-p)^2)/(p*r)))  
   }
   )

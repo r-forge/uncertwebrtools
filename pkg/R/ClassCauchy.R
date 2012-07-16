@@ -9,14 +9,13 @@ setMethod(
   definition=function(.Object, location, scale){
     .Object@location<-location
     .Object@scale<-scale
-    #validObject(.Object)
     return(.Object)
   }
   )
 
 setGeneric(
   name="getCauchyLocation",
-  def=function(.Object) {standardGeneric("getLocation")}
+  def=function(.Object) {standardGeneric("getCauchyLocation")}
   )
 
 setMethod(
@@ -29,7 +28,7 @@ setMethod(
 
 setGeneric(
   name="getCauchyScale",
-  def=function(.Object) {standardGeneric("getScale")}
+  def=function(.Object) {standardGeneric("getCauchyScale")}
   )
 
 setMethod(
@@ -42,35 +41,35 @@ setMethod(
 
 setGeneric(
   name="setCauchyLocation<-",
-  def=function(.Object,Value){standardGeneric("setLocation<-")}
+  def=function(.Object,value){standardGeneric("setCauchyLocation<-")}
   )
 
 setReplaceMethod(
   f="setCauchyLocation",
   signature="CauchyDistribution",
-  definition=function(.Object,Value){
-    .Object@location<-Value
+  definition=function(.Object,value){
+    .Object@location<-value
     return(.Object)
   }
   )
 
 setGeneric(
   name="setCauchyScale<-",
-  def=function(.Object,Value){standardGeneric("setScale<-")}
+  def=function(.Object,value){standardGeneric("setCauchyScale<-")}
   )
 
 setReplaceMethod(
   f="setCauchyScale",
   signature="CauchyDistribution",
-  definition=function(.Object,Value){
-    .Object@scale<-Value
+  definition=function(.Object,value){
+    .Object@scale<-value
     return(.Object)
   }
   )
 
 setGeneric(
   name="getCauchySamples",
-  def=function(.Object,number) {standardGeneric("getSamples")}
+  def=function(.Object,number) {standardGeneric("getCauchySamples")}
   )
 
 setMethod(
@@ -84,5 +83,33 @@ setMethod(
     }
     rsample<-new(Class="RandomSample", temp)
     return(rsample)
+  }
+  )
+
+setGeneric(
+  name="getCauchyMedian",
+  def=function(.Object){standardGeneric("getCauchyMedian")}
+  )
+
+setMethod(
+  f="getCauchyMedian",
+  signature="CauchyDistribution",
+  definition=function(.Object)
+  {
+    return(.Object@location)
+  }
+  )
+
+setGeneric(
+  name="getCauchyMode",
+  def=function(.Object){standardGeneric("getCauchyMode")}
+  )
+
+setMethod(
+  f="getCauchyMode",
+  signature="CauchyDistribution",
+  definition=function(.Object)
+  {
+    return(.Object@location)
   }
   )

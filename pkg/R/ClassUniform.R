@@ -9,14 +9,13 @@ setMethod(
   definition=function(.Object, min, max){
     .Object@minimum<-min
     .Object@maximum<-max
-    #validObject(.Object)
     return(.Object)
   }
   )
 
 setGeneric(
   name="getUniformMinimum",
-  def=function(.Object) {standardGeneric("getMinimum")}
+  def=function(.Object) {standardGeneric("getUniformMinimum")}
   )
 
 setMethod(
@@ -29,7 +28,7 @@ setMethod(
 
 setGeneric(
   name="getUniformMaximum",
-  def=function(.Object) {standardGeneric("getMaximum")}
+  def=function(.Object) {standardGeneric("getUniformMaximum")}
   )
 
 setMethod(
@@ -42,35 +41,35 @@ setMethod(
 
 setGeneric(
   name="setUniformMinimum<-",
-  def=function(.Object,Value){standardGeneric("setMinimum<-")}
+  def=function(.Object,value){standardGeneric("setUniformMinimum<-")}
   )
 
 setReplaceMethod(
   f="setUniformMinimum",
   signature="UniformDistribution",
-  definition=function(.Object,Value){
-    .Object@minimum<-Value
+  definition=function(.Object,value){
+    .Object@minimum<-value
     return(.Object)
   }
   )
 
 setGeneric(
   name="setUniformMaximum<-",
-  def=function(.Object,Value){standardGeneric("setMaximum<-")}
+  def=function(.Object,value){standardGeneric("setUniformMaximum<-")}
   )
 
 setReplaceMethod(
   f="setUniformMaximum",
   signature="UniformDistribution",
-  definition=function(.Object,Value){
-    .Object@maximum<-Value
+  definition=function(.Object,value){
+    .Object@maximum<-value
     return(.Object)
   }
   )
 
 setGeneric(
   name="getUniformSamples",
-  def=function(.Object,number) {standardGeneric("getSamples")}
+  def=function(.Object,number) {standardGeneric("getUniformSamples")}
   )
 
 setMethod(
@@ -84,5 +83,104 @@ setMethod(
     }
     rsample<-new(Class="RandomSample", temp)
     return(rsample)
+  }
+  )
+
+setGeneric(
+  name="getUniformMean",
+  def=function(.Object){standardGeneric("getUniformMean")}
+  )
+
+setMethod(
+  f="getUniformMean",
+  signature="UniformDistribution",
+  definition=function(.Object)
+  {
+    return((.Object@maximum+.Object@minimum)/2)  
+  }
+  )
+
+setGeneric(
+  name="getUniformVariance",
+  def=function(.Object){standardGeneric("getUniformVariance")}
+  )
+
+setMethod(
+  f="getUniformVariance",
+  signature="UniformDistribution",
+  definition=function(.Object)
+  {
+    return(((.Object@maximum-.Object@minimum)^2)/12)  
+  }
+  )
+
+setGeneric(
+  name="getUniformStandardDeviation",
+  def=function(.Object){standardGeneric("getUniformStandardDeviation")}
+  )
+
+setMethod(
+  f="getUniformStandardDeviation",
+  signature="UniformDistribution",
+  definition=function(.Object)
+  {
+    var<-getUniformVariance(.Object)
+    return(sqrt(var))  
+  }
+  )
+
+setGeneric(
+  name="getUniformMode",
+  def=function(.Object){standardGeneric("getUniformMode")}
+  )
+
+setMethod(
+  f="getUniformMode",
+  signature="UniformDistribution",
+  definition=function(.Object)
+  {
+    return(runif(1,.Object@minimum, .Object@maximum))  
+  }
+  )
+
+setGeneric(
+  name="getUniformMedian",
+  def=function(.Object){standardGeneric("getUniformMedian")}
+  )
+
+setMethod(
+  f="getUniformMedian",
+  signature="UniformDistribution",
+  definition=function(.Object)
+  {
+    return((.Object@maximum+.Object@minimum)/2)  
+  }
+  )
+
+setGeneric(
+  name="getUniformSkewness",
+  def=function(.Object){standardGeneric("getUniformSkewness")}
+  )
+
+setMethod(
+  f="getUniformSkewness",
+  signature="UniformDistribution",
+  definition=function(.Object)
+  {
+    return(0)  
+  }
+  )
+
+setGeneric(
+  name="getUniformKurtosis",
+  def=function(.Object){standardGeneric("getUniformKurtosis")}
+  )
+
+setMethod(
+  f="getUniformKurtosis",
+  signature="UniformDistribution",
+  definition=function(.Object)
+  {
+    return(-6/5)  
   }
   )

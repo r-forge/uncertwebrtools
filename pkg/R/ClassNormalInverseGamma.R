@@ -12,18 +12,17 @@ setMethod(
     .Object@varianceScaling<-variance
     .Object@shape<-shape
     .Object@scale<-scale
-    #validObject(.Object)
     return(.Object)
   }
   )
 
 setGeneric(
-  name="getNormalInverseGammaMean",
-  def=function(.Object) {standardGeneric("getMean")}
+  name="getNormInvGammaMean",
+  def=function(.Object) {standardGeneric("getNormInvGammaMean")}
   )
 
 setMethod(
-  f="getNormalInverseGammaMean",
+  f="getNormInvGammaMean",
   signature="NormalInverseGammaDistribution",
   definition=function(.Object){
     return(.Object@mean)
@@ -31,12 +30,12 @@ setMethod(
   )
 
 setGeneric(
-  name="getNormalInverseGammaVarianceScaling",
-  def=function(.Object) {standardGeneric("getVarianceScaling")}
+  name="getNormInvGammaVarianceScale",
+  def=function(.Object) {standardGeneric("getNormInvGammaVarianceScale")}
   )
 
 setMethod(
-  f="getNormalInverseGammaVarianceScaling",
+  f="getNormInvGammaVarianceScale",
   signature="NormalInverseGammaDistribution",
   definition=function(.Object){
     return(.Object@varianceScaling)
@@ -44,12 +43,12 @@ setMethod(
   )
 
 setGeneric(
-  name="getNormalInverseGammaShape",
-  def=function(.Object) {standardGeneric("getShape")}
+  name="getNormInvGammaShape",
+  def=function(.Object) {standardGeneric("getNormInvGammaShape")}
   )
 
 setMethod(
-  f="getNormalInverseGammaShape",
+  f="getNormInvGammaShape",
   signature="NormalInverseGammaDistribution",
   definition=function(.Object){
     return(.Object@shape)
@@ -57,12 +56,12 @@ setMethod(
   )
 
 setGeneric(
-  name="getNormalInverseGammaScale",
-  def=function(.Object) {standardGeneric("getScale")}
+  name="getNormInvGammaScale",
+  def=function(.Object) {standardGeneric("getNormInvGammaScale")}
   )
 
 setMethod(
-  f="getNormalInverseGammaScale",
+  f="getNormInvGammaScale",
   signature="NormalInverseGammaDistribution",
   definition=function(.Object){
     return(.Object@scale)
@@ -70,76 +69,81 @@ setMethod(
   )
 
 setGeneric(
-  name="setNormalInverseGammaMean<-",
-  def=function(.Object,Value){standardGeneric("setMean<-")}
+  name="setNormInvGammaMean<-",
+  def=function(.Object,value){standardGeneric("setNormInvGammaMean<-")}
   )
 
 setReplaceMethod(
-  f="setNormalInverseGammaMean",
+  f="setNormInvGammaMean",
   signature="NormalInverseGammaDistribution",
-  definition=function(.Object,Value){
-    .Object@mean<-Value
+  definition=function(.Object,value){
+    .Object@mean<-value
     return(.Object)
   }
   )
 
 setGeneric(
-  name="setNormalInverseGammaVarianceScaling<-",
-  def=function(.Object,Value){standardGeneric("setVarianceScaling<-")}
+  name="setNormInvGammaVarianceScale<-",
+  def=function(.Object,value){standardGeneric("setNormInvGammaVarianceScale<-")}
   )
 
 setReplaceMethod(
-  f="setNormalInverseGammaVarianceScaling",
+  f="setNormInvGammaVarianceScale",
   signature="NormalInverseGammaDistribution",
-  definition=function(.Object,Value){
-    .Object@varianceScaling<-Value
+  definition=function(.Object,value){
+    .Object@varianceScaling<-value
     return(.Object)
   }
   )
 
 setGeneric(
-  name="setNormalInverseGammaShape<-",
-  def=function(.Object,Value){standardGeneric("setShape<-")}
+  name="setNormInvGammaShape<-",
+  def=function(.Object,value){standardGeneric("setNormInvGammaShape<-")}
   )
 
 setReplaceMethod(
-  f="setNormalInverseGammaShape",
+  f="setNormInvGammaShape",
   signature="NormalInverseGammaDistribution",
-  definition=function(.Object,Value){
-    .Object@shape<-Value
+  definition=function(.Object,value){
+    .Object@shape<-value
     return(.Object)
   }
   )
 
 setGeneric(
-  name="setNormalInverseGammaScale<-",
-  def=function(.Object,Value){standardGeneric("setScale<-")}
+  name="setNormInvGammaScale<-",
+  def=function(.Object,value){standardGeneric("setNormInvGammaScale<-")}
   )
 
 setReplaceMethod(
-  f="setNormalInverseGammaScale",
+  f="setNormInvGammaScale",
   signature="NormalInverseGammaDistribution",
-  definition=function(.Object,Value){
-    .Object@scale<-Value
+  definition=function(.Object,value){
+    .Object@scale<-value
     return(.Object)
   }
   )
 
-# setGeneric(
-#   name="getNormalInverseGammaSamples",
-#   def=function(.Object,number) {standardGeneric("getSamples")}
-#   )
-# 
-# setMethod(
-#   f="getNormalInverseGammaSamples",
-#   signature="NormalInverseGammaDistribution",
-#   definition=function(.Object, number){
-#     sample<-rgamma(number, shape=.Object@shape, scale=.Object@scale)
-#     temp<-c()
-#     for(i in 1:length(sample)){
-#       temp<-c(temp, new(Class="Realisation", Value=as.double(sample[i]), Id=i, Weight=1/number))
-#     }
-#     rsample<-new(Class="RandomSample", temp)
-#     return(rsample)
-#   }
-#   )
+setGeneric(
+  name="getNormInvGammaSamples",
+  def=function(.Object,number) {standardGeneric("getNormInvGammaSamples")}
+  )
+
+setMethod(
+  f="getNormInvGammaSamples",
+  signature="NormalInverseGammaDistribution",
+  definition=function(.Object, number){
+    iScale<-1/.Object@scale
+    gSample<-rgamma(number, shape=.Object@shape, scale=iScale)
+    sample<-c()
+    temp<-c()
+    for(i in 1:length(gSample)){
+      isample<-1/gSample[i]
+      sample[i]<-rnorm(1, mean=.Object@mean, sqrt(isample/.Object@varianceScaling))
+      temp<-c(temp, new(Class="Realisation", Value=as.double(sample[i]), Id=i, Weight=1/number))
+    }
+    rsample<-new(Class="RandomSample", temp)
+    return(rsample)
+  }
+  )
+

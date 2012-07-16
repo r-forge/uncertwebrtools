@@ -17,12 +17,12 @@ setMethod(
   )
 
 setGeneric(
-  name="getCredibleIntervalLowerLimit",
-  def=function(.Object){standardGeneric("getCredibleIntervalLowerLimit")}
+  name="getCredibleIntervalLowerLimitAsQuantile",
+  def=function(.Object){standardGeneric("getCredibleIntervalLowerLimitAsQuantile")}
   )
 
 setMethod(
-  f="getCredibleIntervalLowerLimit",
+  f="getCredibleIntervalLowerLimitAsQuantile",
   signature="CredibleInterval",
   definition=function(.Object)
   {
@@ -31,12 +31,12 @@ setMethod(
   )
 
 setGeneric(
-  name="getCredibleIntervalUpperLimit",
-  def=function(.Object){standardGeneric("getCredibleIntervalUpperLimit")}
+  name="getCredibleIntervalUpperLimitAsQuantile",
+  def=function(.Object){standardGeneric("getCredibleIntervalUpperLimitAsQuantile")}
   )
 
 setMethod(
-  f="getCredibleIntervalUpperLimit",
+  f="getCredibleIntervalUpperLimitAsQuantile",
   signature="CredibleInterval",
   definition=function(.Object)
   {
@@ -45,16 +45,67 @@ setMethod(
   )
 
 setGeneric(
-  name="getCredibleIntervalLimits",
-  def=function(.Object){standardGeneric("getCredibleIntervalLimits")}
+  name="getCredibleIntervalLimitsAsQuantiles",
+  def=function(.Object){standardGeneric("getCredibleIntervalLimitsAsQuantiles")}
   )
 
 setMethod(
-  f="getCredibleIntervalLimits",
+  f="getCredibleIntervalLimitsAsQuantiles",
   signature="CredibleInterval",
   definition=function(.Object)
   {
-    return(c(.Object@lower,.Object@upper))    
+    return(list(lower=.Object@lower,upper=.Object@upper))    
+  }
+  )
+
+setGeneric(
+  name="getCredibleIntervalLowerLimitAsPrimitives",
+  def=function(.Object){standardGeneric("getCredibleIntervalLowerLimitAsPrimitives")}
+  )
+
+setMethod(
+  f="getCredibleIntervalLowerLimitAsPrimitives",
+  signature="CredibleInterval",
+  definition=function(.Object)
+  {
+    lowerQuantile<-.Object@lower
+    listToReturn<-list(level=lowerQuantile@level, values=lowerQuantile@values)
+    return(listToReturn)    
+  }
+  )
+
+setGeneric(
+  name="getCredibleIntervalUpperLimitAsPrimitives",
+  def=function(.Object){standardGeneric("getCredibleIntervalUpperLimitAsPrimitives")}
+  )
+
+setMethod(
+  f="getCredibleIntervalUpperLimitAsPrimitives",
+  signature="CredibleInterval",
+  definition=function(.Object)
+  {
+    upperQuantile<-.Object@upper
+    listToReturn<-list(level=upperQuantile@level, values=upperQuantile@values)
+    return(listToReturn)
+  }
+  )
+
+setGeneric(
+  name="getCredibleIntervalLimitsAsPrimitives",
+  def=function(.Object){standardGeneric("getCredibleIntervalLimitsAsPrimitives")}
+  )
+
+setMethod(
+  f="getCredibleIntervalLimitsAsPrimitives",
+  signature="CredibleInterval",
+  definition=function(.Object)
+  {
+    lowerQuantile<-.Object@lower
+    l<-list(level=lowerQuantile@level, values=lowerQuantile@values)
+    upperQuantile<-.Object@upper
+    u<-list(level=upperQuantile@level, values=upperQuantile@values)
+    listToReturn<-list(lower=l,upper=u)
+    return(listToReturn)
   }
   )
 

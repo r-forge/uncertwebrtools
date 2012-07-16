@@ -1,6 +1,6 @@
 setClass(
   Class="BinomialDistribution",
-  representation=representation(numberOfTrials="integer", probabilityOfSuccess="numeric")
+  representation=representation(numberOfTrials="numeric", probabilityOfSuccess="numeric")
   )
 
 setMethod(
@@ -9,14 +9,13 @@ setMethod(
   definition=function(.Object, trials, probability){
     .Object@numberOfTrials<-trials
     .Object@probabilityOfSuccess<-probability
-    #validObject(.Object)
     return(.Object)
   }
   )
 
 setGeneric(
   name="getBinomialNumberOfTrials",
-  def=function(.Object) {standardGeneric("getNumberOfTrials")}
+  def=function(.Object) {standardGeneric("getBinomialNumberOfTrials")}
   )
 
 setMethod(
@@ -29,7 +28,7 @@ setMethod(
 
 setGeneric(
   name="getBinomialProbabilityOfSuccess",
-  def=function(.Object) {standardGeneric("getProbabilityOfSuccess")}
+  def=function(.Object) {standardGeneric("getBinomialProbabilityOfSuccess")}
   )
 
 setMethod(
@@ -42,35 +41,35 @@ setMethod(
 
 setGeneric(
   name="setBinomialNumberOfTrials<-",
-  def=function(.Object,Value){standardGeneric("setNumberOfTrials<-")}
+  def=function(.Object,value){standardGeneric("setBinomialNumberOfTrials<-")}
   )
 
 setReplaceMethod(
   f="setBinomialNumberOfTrials",
   signature="BinomialDistribution",
-  definition=function(.Object,Value){
-    .Object@numberOfTrials<-Value
+  definition=function(.Object,value){
+    .Object@numberOfTrials<-value
     return(.Object)
   }
   )
 
 setGeneric(
-  name="setBinomialProbabilityOfSuccess<-",
-  def=function(.Object,Value){standardGeneric("setProbabilityOfSuccess<-")}
+  name="setBinomialSuccessProbability<-",
+  def=function(.Object,value){standardGeneric("setBinomialSuccessProbability<-")}
   )
 
 setReplaceMethod(
-  f="setBinomialProbabilityOfSuccess",
+  f="setBinomialSuccessProbability",
   signature="BinomialDistribution",
-  definition=function(.Object,Value){
-    .Object@probabilityOfSuccess<-Value
+  definition=function(.Object,value){
+    .Object@probabilityOfSuccess<-value
     return(.Object)
   }
   )
 
 setGeneric(
   name="getBinomialSamples",
-  def=function(.Object,number) {standardGeneric("getSamples")}
+  def=function(.Object,number) {standardGeneric("getBinomialSamples")}
   )
 
 setMethod(
@@ -84,5 +83,104 @@ setMethod(
     }
     rsample<-new(Class="RandomSample", temp)
     return(rsample)
+  }
+  )
+
+setGeneric(
+  name="getBinomialMean",
+  def=function(.Object){standardGeneric("getBinomialMean")}
+  )
+
+setMethod(
+  f="getBinomialMean",
+  signature="BinomialDistribution",
+  definition=function(.Object)
+  {
+    return(.Object@numberOfTrials*.Object@probabilityOfSuccess)  
+  }
+  )
+
+setGeneric(
+  name="getBinomialVariance",
+  def=function(.Object){standardGeneric("getBinomialVariance")}
+  )
+
+setMethod(
+  f="getBinomialVariance",
+  signature="BinomialDistribution",
+  definition=function(.Object)
+  {
+    return(.Object@numberOfTrials*.Object@probabilityOfSuccess*(1-.Object@probabilityOfSuccess))  
+  }
+  )
+
+setGeneric(
+  name="getBinomialStandardDeviation",
+  def=function(.Object){standardGeneric("getBinomialStandardDeviation")}
+  )
+
+setMethod(
+  f="getBinomialStandardDeviation",
+  signature="BinomialDistribution",
+  definition=function(.Object)
+  {
+    var<-getBinomialVariance(.Object)
+    return(sqrt(var))
+  }
+  )
+
+setGeneric(
+  name="getBinomialMode",
+  def=function(.Object){standardGeneric("getBinomialMode")}
+  )
+
+setMethod(
+  f="getBinomialMode",
+  signature="BinomialDistribution",
+  definition=function(.Object)
+  {
+    t<-(.Object@numberOfTrials+1)*.Object@probabilityOfSuccess
+    if(t-floor(t)==0 & t>0 & t<=.Object@numberOfTrials)
+    {
+      return(c(t, t-1))
+    }
+    else if(.Object@probabilityOfSuccess==1)
+    {
+      return(.Object@numberOfTrials)
+    }
+    else
+    {
+      return(floor(t))
+    }
+  }
+  )
+
+setGeneric(
+  name="getBinomialSkewness",
+  def=function(.Object){standardGeneric("getBinomialSkewness")}
+  )
+
+setMethod(
+  f="getBinomialSkewness",
+  signature="BinomialDistribution",
+  definition=function(.Object)
+  {
+    d<-sqrt(.Object@numberOfTrials*.Object@probabilityOfSuccess*(1-.Object@probabilityOfSuccess))  
+    return((1-2*.Object@probabilityOfSuccess)/d)
+  }
+  )
+
+setGeneric(
+  name="getBinomialKurtosis",
+  def=function(.Object){standardGeneric("getBinomialKurtosis")}
+  )
+
+setMethod(
+  f="getBinomialKurtosis",
+  signature="BinomialDistribution",
+  definition=function(.Object)
+  {
+    d<-.Object@probabilityOfSuccess*(1-.Object@probabilityOfSuccess)  
+    return((1-6*d)/(d*.Object@numberOfTrials))
   }
   )

@@ -8,14 +8,13 @@ setMethod(
   signature="GeometricDistribution",
   definition=function(.Object, probability){
     .Object@probability<-probability
-    #validObject(.Object)
     return(.Object)
   }
   )
 
 setGeneric(
   name="getGeometricProbability",
-  def=function(.Object) {standardGeneric("getProbability")}
+  def=function(.Object) {standardGeneric("getGeometricProbability")}
   )
 
 setMethod(
@@ -28,21 +27,21 @@ setMethod(
 
 setGeneric(
   name="setGeometricProbability<-",
-  def=function(.Object,Value){standardGeneric("setProbability<-")}
+  def=function(.Object,value){standardGeneric("setGeometricProbability<-")}
   )
 
 setReplaceMethod(
   f="setGeometricProbability",
   signature="GeometricDistribution",
-  definition=function(.Object,Value){
-    .Object@probability<-Value
+  definition=function(.Object,value){
+    .Object@probability<-value
     return(.Object)
   }
   )
 
 setGeneric(
   name="getGeometricSamples",
-  def=function(.Object,number) {standardGeneric("getSamples")}
+  def=function(.Object,number) {standardGeneric("getGeometricSamples")}
   )
 
 setMethod(
@@ -56,5 +55,112 @@ setMethod(
     }
     rsample<-new(Class="RandomSample", temp)
     return(rsample)
+  }
+  )
+
+setGeneric(
+  name="getGeometricMean",
+  def=function(.Object){standardGeneric("getGeometricMean")}
+  )
+
+setMethod(
+  f="getGeometricMean",
+  signature="GeometricDistribution",
+  definition=function(.Object)
+  {
+    return(1/.Object@probability)  
+  }
+  )
+
+setGeneric(
+  name="getGeometricVariance",
+  def=function(.Object){standardGeneric("getGeometricVariance")}
+  )
+
+setMethod(
+  f="getGeometricVariance",
+  signature="GeometricDistribution",
+  definition=function(.Object)
+  {
+    return((1-.Object@probability)/.Object@probability^2)  
+  }
+  )
+
+setGeneric(
+  name="getGeometricStandardDeviation",
+  def=function(.Object){standardGeneric("getGeometricStandardDeviation")}
+  )
+
+setMethod(
+  f="getGeometricStandardDeviation",
+  signature="GeometricDistribution",
+  definition=function(.Object)
+  {
+    var<-getGeometricVariance(.Object)
+    return(sqrt(var))  
+  }
+  )
+
+setGeneric(
+  name="getGeometricMode",
+  def=function(.Object){standardGeneric("getGeometricMode")}
+  )
+
+setMethod(
+  f="getGeometricMode",
+  signature="GeometricDistribution",
+  definition=function(.Object)
+  {
+    return(1)  
+  }
+  )
+
+setGeneric(
+  name="getGeometricMedian",
+  def=function(.Object){standardGeneric("getGeometricMedian")}
+  )
+
+setMethod(
+  f="getGeometricMedian",
+  signature="GeometricDistribution",
+  definition=function(.Object)
+  {
+    t<--1/log((1-.Object@probability),2)
+    if(t-floor(t)==0)
+    {
+      return(c(ceiling(t), ceiling(t)-1))
+    }
+    else
+    {
+      return(ceiling(t))
+    }
+  }
+  )
+
+setGeneric(
+  name="getGeometricSkewness",
+  def=function(.Object){standardGeneric("getGeometricSkewness")}
+  )
+
+setMethod(
+  f="getGeometricSkewness",
+  signature="GeometricDistribution",
+  definition=function(.Object)
+  {
+    return((2-.Object@probability)/sqrt(1-.Object@probability))  
+  }
+  )
+
+setGeneric(
+  name="getGeometricKurtosis",
+  def=function(.Object){standardGeneric("getGeometricKurtosis")}
+  )
+
+setMethod(
+  f="getGeometricKurtosis",
+  signature="GeometricDistribution",
+  definition=function(.Object)
+  {
+    return(6+((.Object@probability^2)/(1-.Object@probability)))  
   }
   )

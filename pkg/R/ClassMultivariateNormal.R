@@ -10,18 +10,17 @@ setMethod(
   definition=function(.Object, mean, covariance){
     .Object@mean<-mean
     .Object@covarianceMatrix<-covariance
-    #validObject(.Object)
     return(.Object)
   }
   )
 
 setGeneric(
-  name="getMultivariateNormalMean",
-  def=function(.Object) {standardGeneric("getMean")}
+  name="getMVNormalMean",
+  def=function(.Object) {standardGeneric("getMVNormalMean")}
   )
 
 setMethod(
-  f="getMultivariateNormalMean",
+  f="getMVNormalMean",
   signature="MultivariateNormalDistribution",
   definition=function(.Object){
     return(.Object@mean)
@@ -29,12 +28,12 @@ setMethod(
   )
 
 setGeneric(
-  name="getMultivariateNormalCovarianceMatrix",
-  def=function(.Object) {standardGeneric("getCovarianceMatrix")}
+  name="getMVNormalCovarianceMatrix",
+  def=function(.Object) {standardGeneric("getMVNormalCovarianceMatrix")}
   )
 
 setMethod(
-  f="getMultivariateNormalCovarianceMatrix",
+  f="getMVNormalCovarianceMatrix",
   signature="MultivariateNormalDistribution",
   definition=function(.Object){
     return(.Object@covarianceMatrix)
@@ -42,48 +41,85 @@ setMethod(
   )
 
 setGeneric(
-  name="setMultivariateNormalMean<-",
-  def=function(.Object,Value){standardGeneric("setMean<-")}
+  name="setMVNormalMean<-",
+  def=function(.Object,value){standardGeneric("setMVNormalMean<-")}
   )
 
 setReplaceMethod(
-  f="setMultivariateNormalMean",
+  f="setMVNormalMean",
   signature="MultivariateNormalDistribution",
-  definition=function(.Object,Value){
-    .Object@mean<-Value
+  definition=function(.Object,value){
+    .Object@mean<-value
     return(.Object)
   }
   )
 
 setGeneric(
-  name="setMultivariateNormalCovarianceMatrix<-",
-  def=function(.Object,Value){standardGeneric("setCovarianceMatrix<-")}
+  name="setMVNormalCovarianceMatrix<-",
+  def=function(.Object,value){standardGeneric("setMVNormalCovarianceMatrix<-")}
   )
 
 setReplaceMethod(
-  f="setMultivariateNormalCovarianceMatrix",
+  f="setMVNormalCovarianceMatrix",
   signature="MultivariateNormalDistribution",
-  definition=function(.Object,Value){
-    .Object@covarianceMatrix<-Value
+  definition=function(.Object,value){
+    .Object@covarianceMatrix<-value
     return(.Object)
   }
   )
-# 
-# setGeneric(
-#   name="getMultivariateNormalSamples",
-#   def=function(.Object,number) {standardGeneric("getSamples")}
-#   )
-# 
-# setMethod(
-#   f="getMultivariateNormalSamples",
-#   signature="MultivariateNormalDistribution",
-#   definition=function(.Object, number){
-#     sample<-rweibull(number, .Object@covarianceMatrix, mean=.Object@mean)
-#     temp<-c()
-#     for(i in 1:length(sample)){
-#       temp<-c(temp, new(Class="Realisation", Value=as.double(sample[i]), Id=i, Weight=1/number))
-#     }
-#     rsample<-new(Class="RandomSample", temp)
-#     return(rsample)
-#   }
-#   )
+
+setGeneric(
+  name="getMVNormalSamples",
+  def=function(.Object,number) {standardGeneric("getMVNormalSamples")}
+  )
+
+setMethod(
+  f="getMVNormalSamples",
+  signature="MultivariateNormalDistribution",
+  definition=function(.Object, number){
+      library("mvtnorm")
+    sample<-rmvnorm(number, mean=.Object@mean, .Object@covarianceMatrix, )
+    temp<-list()
+    for(i in 1:number){
+        a<-c()
+        for(j in 1:length(.Object@mean))
+        {
+           a<-c(a, new(Class="Realisation", Value=as.double(sample[i,j]), 
+                       Id=i, Weight=1/number))
+          
+        }
+        temp[[i]]<-a
+    }
+    rsample<-new(Class="RandomSample", temp)
+    return(rsample)
+  }
+  )
+
+setGeneric(
+  name="getMVNormalStandardDeviation",
+  def=function(.Object){standardGeneric("getMVNormalStandardDeviation")}
+  )
+
+setMethod(
+  f="getMVNormalStandardDeviation",
+  signature="MultivariateNormalDistribution",
+  definition=function(.Object)
+  {
+    var<-getMVNormalCovarianceMatrix(.Object)
+    return(sqrt(var))  
+  }
+  )
+
+setGeneric(
+  name="getMVNormalMode",
+  def=function(.Object){standardGeneric("getMVNormalMode")}
+  )
+
+setMethod(
+  f="getMVNormalMode",
+  signature="MultivariateNormalDistribution",
+  definition=function(.Object)
+  {
+    return(.Object@mean)  
+  }
+  )

@@ -29,16 +29,17 @@ setMethod(
   )
 
 setGeneric(
-  name="getDiscreteProbabilities",
-  def=function(.Object){standardGeneric("getDiscreteProbabilities")}
+  name="getDiscreteProbability",
+  def=function(.Object, Category){standardGeneric("getDiscreteProbability")}
   )
 
 setMethod(
-  f="getDiscreteProbabilities",
+  f="getDiscreteProbability",
   signature="DiscreteProbability",
-  definition=function(.Object)
+  definition=function(.Object, Category)
   {
-    return(.Object@probabilities)    
+    index<-which(.Object@categories==Category)
+    return(.Object@probabilities[[index]])    
   }
   )
 
@@ -72,16 +73,17 @@ setReplaceMethod(
   )
 
 setGeneric(
-  name="setDiscreteProbabilities<-",
-  def=function(.Object, probability){standardGeneric("setDiscreteProbabilities<-")}
+  name="setDiscreteProbability<-",
+  def=function(.Object, Category, value){standardGeneric("setDiscreteProbability<-")}
   )
 
 setReplaceMethod(
-  f="setDiscreteProbabilities",
+  f="setDiscreteProbability",
   signature="DiscreteProbability",
-  definition=function(.Object, probability)
+  definition=function(.Object, Category, value)
   {
-    .Object@probabilities<-probability
+    index<-which(.Object@categories==Category)
+    .Object@probabilities[[index]]<-value
     return(.Object)
     
   }

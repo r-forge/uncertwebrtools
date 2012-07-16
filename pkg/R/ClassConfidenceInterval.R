@@ -17,12 +17,12 @@ setMethod(
   )
 
 setGeneric(
-  name="getConfidenceIntervalLowerLimit",
-  def=function(.Object){standardGeneric("getConfidenceIntervalLowerLimit")}
+  name="getConfidenceIntervalLowerLimitAsQuantile",
+  def=function(.Object){standardGeneric("getConfidenceIntervalLowerLimitAsQuantile")}
   )
 
 setMethod(
-  f="getConfidenceIntervalLowerLimit",
+  f="getConfidenceIntervalLowerLimitAsQuantile",
   signature="ConfidenceInterval",
   definition=function(.Object)
   {
@@ -31,12 +31,12 @@ setMethod(
   )
 
 setGeneric(
-  name="getConfidenceIntervalUpperLimit",
-  def=function(.Object){standardGeneric("getConfidenceIntervalUpperLimit")}
+  name="getConfidenceIntervalUpperLimitAsQuantile",
+  def=function(.Object){standardGeneric("getConfidenceIntervalUpperLimitAsQuantile")}
   )
 
 setMethod(
-  f="getConfidenceIntervalUpperLimit",
+  f="getConfidenceIntervalUpperLimitAsQuantile",
   signature="ConfidenceInterval",
   definition=function(.Object)
   {
@@ -45,16 +45,67 @@ setMethod(
   )
 
 setGeneric(
-  name="getConfidenceIntervalLimits",
-  def=function(.Object){standardGeneric("getConfidenceIntervalLimits")}
+  name="getConfidenceIntervalLimitsAsQuantiles",
+  def=function(.Object){standardGeneric("getConfidenceIntervalLimitsAsQuantiles")}
   )
 
 setMethod(
-  f="getConfidenceIntervalLimits",
+  f="getConfidenceIntervalLimitsAsQuantiles",
   signature="ConfidenceInterval",
   definition=function(.Object)
   {
-    return(c(.Object@lower,.Object@upper))    
+    return(list(lower=.Object@lower,upper=.Object@upper))    
+  }
+  )
+
+setGeneric(
+  name="getConfidenceIntervalLowerLimitAsPrimitives",
+  def=function(.Object){standardGeneric("getConfidenceIntervalLowerLimitAsPrimitives")}
+  )
+
+setMethod(
+  f="getConfidenceIntervalLowerLimitAsPrimitives",
+  signature="ConfidenceInterval",
+  definition=function(.Object)
+  {
+    lowerQuantile<-.Object@lower
+    listToReturn<-list(level=lowerQuantile@level, values=lowerQuantile@values)
+    return(listToReturn)    
+  }
+  )
+
+setGeneric(
+  name="getConfidenceIntervalUpperLimitAsPrimitives",
+  def=function(.Object){standardGeneric("getConfidenceIntervalUpperLimitAsPrimitives")}
+  )
+
+setMethod(
+  f="getConfidenceIntervalUpperLimitAsPrimitives",
+  signature="ConfidenceInterval",
+  definition=function(.Object)
+  {
+    upperQuantile<-.Object@upper
+    listToReturn<-list(level=upperQuantile@level, values=upperQuantile@values)
+    return(listToReturn)
+  }
+  )
+
+setGeneric(
+  name="getConfidenceIntervalLimitsAsPrimitives",
+  def=function(.Object){standardGeneric("getConfidenceIntervalLimitsAsPrimitives")}
+  )
+
+setMethod(
+  f="getConfidenceIntervalLimitsAsPrimitives",
+  signature="ConfidenceInterval",
+  definition=function(.Object)
+  {
+    lowerQuantile<-.Object@lower
+    l<-list(level=lowerQuantile@level, values=lowerQuantile@values)
+    upperQuantile<-.Object@upper
+    u<-list(level=upperQuantile@level, values=upperQuantile@values)
+    listToReturn<-list(lower=l,upper=u)
+    return(listToReturn)
   }
   )
 

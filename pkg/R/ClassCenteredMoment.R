@@ -1,6 +1,6 @@
 setClass(
   Class="CenteredMoment",
-  representation=representation(values="numeric", order="numeric")
+  representation=representation(values="numeric", order="integer")
   )
 
 setMethod(
