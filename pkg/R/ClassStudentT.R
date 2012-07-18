@@ -126,7 +126,7 @@ setMethod(
   signature="StudentTDistribution",
   definition=function(.Object)
   {
-    return(1/.Object@rate)  
+    return(.Object@location)  
   }
   )
 
@@ -140,7 +140,8 @@ setMethod(
   signature="StudentTDistribution",
   definition=function(.Object)
   {
-    return((1/.Object@rate)^2)  
+    f<-.Object@degreesOfFreedom
+    return(.Object@scale*f/(f-2))  
   }
   )
 
@@ -156,61 +157,5 @@ setMethod(
   {
     var<-getStudentTVariance(.Object)
     return(sqrt(var))  
-  }
-  )
-
-setGeneric(
-  name="getStudentTMode",
-  def=function(.Object){standardGeneric("getStudentTMode")}
-  )
-
-setMethod(
-  f="getStudentTMode",
-  signature="StudentTDistribution",
-  definition=function(.Object)
-  {
-    return(0)  
-  }
-  )
-
-setGeneric(
-  name="getStudentTMedian",
-  def=function(.Object){standardGeneric("getStudentTMedian")}
-  )
-
-setMethod(
-  f="getStudentTMedian",
-  signature="StudentTDistribution",
-  definition=function(.Object)
-  {
-    return(log(2)/.Object@rate)  
-  }
-  )
-
-setGeneric(
-  name="getStudentTSkewness",
-  def=function(.Object){standardGeneric("getStudentTSkewness")}
-  )
-
-setMethod(
-  f="getStudentTSkewness",
-  signature="StudentTDistribution",
-  definition=function(.Object)
-  {
-    return(2)  
-  }
-  )
-
-setGeneric(
-  name="getStudentTKurtosis",
-  def=function(.Object){standardGeneric("getStudentTKurtosis")}
-  )
-
-setMethod(
-  f="getStudentTKurtosis",
-  signature="StudentTDistribution",
-  definition=function(.Object)
-  {
-    return(6)  
   }
   )

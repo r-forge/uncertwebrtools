@@ -115,50 +115,98 @@ setReplaceMethod(
   )
 
 setGeneric(
+  name="getConfusionMatrixUserAccuracy",
+  def=function(.Object, CategoryName){standardGeneric("getConfusionMatrixUserAccuracy")}
+  )
+
+setMethod(
+  f="getConfusionMatrixUserAccuracy",
+  signature="ConfusionMatrix",
+  definition=function(.Object, CategoryName)
+  {
+    s<-which(.Object@sourceCategories==CategoryName)
+    countArray<-matrix(.Object@counts, nrow=length(.Object@targetCategories),
+                       ncol=length(.Object@sourceCategories), byrow=TRUE)
+    accuracy<-countArray[s,s]*100/sum(countArray[,s])   
+    return(accuracy)
+  }
+  )
+
+setGeneric(
+  name="getConfusionMatrixProducerAccuracy",
+  def=function(.Object, CategoryName){standardGeneric("getConfusionMatrixProducerAccuracy")}
+  )
+
+setMethod(
+  f="getConfusionMatrixProducerAccuracy",
+  signature="ConfusionMatrix",
+  definition=function(.Object, CategoryName)
+  {
+    s<-which(.Object@sourceCategories==CategoryName)
+    countArray<-matrix(.Object@counts, nrow=length(.Object@targetCategories),
+                       ncol=length(.Object@sourceCategories), byrow=TRUE)
+    accuracy<-countArray[s,s]*100/sum(countArray[s,])   
+    return(accuracy)
+  }
+  )
+
+setGeneric(
   name="getConfusionMatrixCommissionErrorPercentage",
-  def=function(.Object, sourceCategory){standardGeneric("getConfusionMatrixCommissionErrorPercentage")}
+  def=function(.Object, CategoryName){standardGeneric("getConfusionMatrixCommissionErrorPercentage")}
 )
 
 setMethod(
   f="getConfusionMatrixCommissionErrorPercentage",
   signature="ConfusionMatrix",
-  definition=function(.Object, sourceCategory)
+  definition=function(.Object, CategoryName)
   {
-    s<-which(.Object@sourceCategories==sourceCategory)
-    countArray<-matrix(.Object@counts, nrow=length(.Object@targetCategories),
-                       ncol=length(.Object@sourceCategories), byrow=TRUE)
-    trueTotal<-sum(countArray[s,])
-    commissionError<-trueTotal-countArray[s,s]
-    return((commissionError*100)/trueTotal)    
+    acc<-getConfusionMatrixUserAccuracy(.Object, CategoryName)
+    return(100-acc)    
   }
 )
 
 setGeneric(
   name="getConfusionMatrixOmissionErrorPercentage",
-  def=function(.Object, sourceCategory){standardGeneric("getConfusionMatrixOmissionErrorPercentage")}
+  def=function(.Object, CategoryName){standardGeneric("getConfusionMatrixOmissionErrorPercentage")}
 )
 
 setMethod(
   f="getConfusionMatrixOmissionErrorPercentage",
   signature="ConfusionMatrix",
-  definition=function(.Object, sourceCategory)
+  definition=function(.Object, CategoryName)
   {
-    s<-which(.Object@sourceCategories==sourceCategory)
-    countArray<-matrix(.Object@counts, nrow=length(.Object@targetCategories),
-                       ncol=length(.Object@sourceCategories), byrow=TRUE)
-    predictedTotal<-sum(countArray[,s])
-    OmissionError<-predictedTotal-countArray[s,s]
-    return((OmissionError*100)/predictedTotal)    
+    acc<-getConfusionMatrixProducerAccuracy(.Object, CategoryName)
+    return(100-acc)
   }
 )
 
 setGeneric(
-  name="getConfusionMatrixKappa",
-  def=function(.Object){standardGeneric("getConfusionMatrixKappa")}
+  name="getConfusionMatrixMisallocationPercentage",
+  def=function(.Object, actualCategoryName, predictedCategoryName){standardGeneric("getConfusionMatrixMisallocationPercentage")}
+  )
+
+setMethod(
+  f="getConfusionMatrixMisallocationPercentage",
+  signature="ConfusionMatrix",
+  definition=function(.Object, actualCategoryName, predictedCategoryName)
+  {
+    s<-which(.Object@sourceCategories==actualCategoryName)
+    t<-which(.Object@sourceCategories==predictedCategoryName)    
+    countArray<-matrix(.Object@counts, nrow=length(.Object@targetCategories),
+                       ncol=length(.Object@sourceCategories), byrow=TRUE)
+    total<-sum(countArray[s,])   
+    misallocated<-countArray[s,t]
+    return(list(percentage=misallocated*100/total, samplSize=total))
+  }
+  )
+
+setGeneric(
+  name="getConfusionMatrixKhat",
+  def=function(.Object){standardGeneric("getConfusionMatrixKhat")}
 )
 
 setMethod(
-  f="getConfusionMatrixKappa",
+  f="getConfusionMatrixKhat",
   signature="ConfusionMatrix",
   definition=function(.Object)
   {
