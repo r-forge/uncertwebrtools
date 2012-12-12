@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<un:BetaDistribution xmlns:un="http://www.uncertml.org/2.0">
+  <un:alpha>3.14</un:alpha>
+  <un:beta>3.14</un:beta>
+</un:BetaDistribution>
+
+

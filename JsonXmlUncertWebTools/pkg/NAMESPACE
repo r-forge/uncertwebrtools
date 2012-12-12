@@ -1,0 +1,15 @@
+# useDynLib(spcopula)
+
+import(xmlschemaReader, RJSONIO)
+
+# general functions
+export(readFromXML, writeToXML, readFromJSON, writeToJSON, convertToJSON)
+
+## exportClasses(mvdc) ## S4 methods
+## exportMethods(persp, contour)
+## S3method(print, indepTest)
+## importClassesFrom(package, ...)
+## importMethodsFrom(package, ...)
+
+
+
