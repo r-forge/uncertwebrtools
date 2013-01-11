@@ -1,125 +1,135 @@
 setClass(
   Class="Realisation",
-  representation=representation(value="numeric", categories="character", 
-                                id="numeric", weight="numeric")
+  representation=representation(value="numeric", id="numeric", weight="numeric")
   )
 
 setMethod(
   f="initialize",
   signature="Realisation",
-  definition=function(.Object, Value, category='',Id, Weight){
+  definition=function(.Object, Value, Id, Weight){
+    .Object@value=Value
+    .Object@id=Id
+    .Object@weight=Weight
+    return(.Object)
+  }
+  )
+
+setGeneric(
+  name="getValue",
+  def=function(.Object) {standardGeneric("getValue")}
+  )
+
+setMethod(
+  f="getValue",
+  signature="Realisation",
+  definition=function(.Object){
+    return(.Objetc@value)
+  }
+  )
+
+setGeneric(
+  name="getId",
+  def=function(.Object) {standardGeneric("getId")}
+  )
+
+setMethod(
+  f="getId",
+  signature="Realisation",
+  definition=function(.Object){
+    return(.Objetc@id)
+  }
+  )
+
+setGeneric(
+  name="getWeight",
+  def=function(.Object) {standardGeneric("getWeight")}
+  )
+
+setMethod(
+  f="getWeight",
+  signature="Realisation",
+  definition=function(.Object){
+    return(.Objetc@weight)
+  }
+  )
+
+setGeneric(
+  name="setValue<-",
+  def=function(.Object,Value){standardGeneric("setValue<-")}
+  )
+
+setReplaceMethod(
+  f="setValue",
+  signature="Realisation",
+  definition=function(.Object,Value){
     .Object@value<-Value
-    .Object@categories<-category
+    return(.Object)
+  }
+  )
+
+setGeneric(
+  name="setId<-",
+  def=function(.Object,Id){standardGeneric("setId<-")}
+  )
+
+setReplaceMethod(
+  f="setId",
+  signature="Realisation",
+  definition=function(.Object,Id){
     .Object@id<-Id
+    return(.Object)
+  }
+  )
+
+setGeneric(
+  name="setWeight<-",
+  def=function(.Object,Weight){standardGeneric("setWeight<-")}
+  )
+
+setReplaceMethod(
+  f="setWeight",
+  signature="Realisation",
+  definition=function(.Object,Weight){
     .Object@weight<-Weight
     return(.Object)
   }
   )
 
 setGeneric(
-  name="getRealisationValues",
-  def=function(.Object) {standardGeneric("getRealisationValues")}
+  name="convertToJSON",
+  def=function(.Object) {standardGeneric("convertToJSON")}
   )
 
 setMethod(
-  f="getRealisationValues",
+  f="convertToJSON",
   signature="Realisation",
   definition=function(.Object){
-    return(.Object@value)
+    Class=class(.Object)[1]
+    Slots=slotNames(Class)
+    obj<-list()
+    for(i in 1:length(Slots)){
+    obj[[Slots[[i]]]]<-slot(.Object, Slots[[i]])
+    }
+    rdata<-list()
+    rdata[[Class]]=obj
+    return(rdata)    
   }
   )
 
 setGeneric(
-  name="getRealisationCategories",
-  def=function(.Object) {standardGeneric("getRealisationCategories")}
+  name="writeToJSON",
+  def=function(.Object, file){standardGeneric("writeToJSON")}
   )
 
 setMethod(
-  f="getRealisationCategories",
+  f="writeToJSON",
   signature="Realisation",
-  definition=function(.Object){
-    return(.Object@categories)
-  }
-  )
+  definition=function(.Object, file){
+    Class=class(.Object)[1]
+    rdata<-convertToJSON(.Object)
 
-setGeneric(
-  name="getRealisationId",
-  def=function(.Object) {standardGeneric("getRealisationId")}
-  )
-
-setMethod(
-  f="getRealisationId",
-  signature="Realisation",
-  definition=function(.Object){
-    return(.Object@id)
-  }
-  )
-
-setGeneric(
-  name="getRealisationWeight",
-  def=function(.Object) {standardGeneric("getRealisationWeight")}
-  )
-
-setMethod(
-  f="getRealisationWeight",
-  signature="Realisation",
-  definition=function(.Object){
-    return(.Object@weight)
-  }
-  )
-
-setGeneric(
-  name="setRealisationValues<-",
-  def=function(.Object,value){standardGeneric("setRealisationValues<-")}
-  )
-
-setReplaceMethod(
-  f="setRealisationValues",
-  signature="Realisation",
-  definition=function(.Object,value){
-    .Object@value<-value
-    return(.Object)
-  }
-  )
-
-setGeneric(
-  name="setRealisationCategories<-",
-  def=function(.Object,value){standardGeneric("setRealisationCategories<-")}
-  )
-
-setReplaceMethod(
-  f="setRealisationCategories",
-  signature="Realisation",
-  definition=function(.Object,value){
-    .Object@categories<-value
-    return(.Object)
-  }
-  )
-
-setGeneric(
-  name="setRealisationId<-",
-  def=function(.Object,value){standardGeneric("setRealisationId<-")}
-  )
-
-setReplaceMethod(
-  f="setRealisationId",
-  signature="Realisation",
-  definition=function(.Object,value){
-    .Object@id<-value
-    return(.Object)
-  }
-  )
-
-setGeneric(
-  name="setRealisationWeight<-",
-  def=function(.Object,value){standardGeneric("setRealisationWeight<-")}
-  )
-
-setReplaceMethod(
-  f="setRealisationWeight",
-  signature="Realisation",
-  definition=function(.Object,value){
-    .Object@weight<-value
-    return(.Object)
+    #return(rdata)
+    library("rjson")
+    write(toJSON(rdata), file)
   }
   )
