@@ -1,6 +1,6 @@
 # useDynLib(spcopula)
 
-import(xmlschemaReader, RJSONIO)
+import(xmlschemaHelper, RJSONIO)
 
 # general functions
 export(readFromXML, writeToXML, readFromJSON, writeToJSON, convertToJSON)

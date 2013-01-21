@@ -8,6 +8,6 @@ Maintainer: Lucy Bastin <l.bastin@aston.ac.uk>
 Description: Reading and writing JSON and XML representations of Uncertainty types from the UncertML schema, and creating R objects with useful functions to allow the characteristics of statistical data to be queried.
 License: GPL
 LazyLoad: yes
-Depends: xmlschemaReader, RJSONIO, methods, R (>= 2.11.0)
+Depends: xmlschemaHelper, RJSONIO, methods, R (>= 2.11.0)
 URL: uncertweb.org
 
