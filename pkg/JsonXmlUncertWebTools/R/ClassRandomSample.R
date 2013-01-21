@@ -1,6 +1,7 @@
 setClass(
   Class="RandomSample",
-  representation=representation(realisations="list", samplingMethodDescription="character")
+  representation=representation(realisations="list", samplingMethodDescription="character"),
+  contains="Uncertainty"
   )
 
 setMethod(

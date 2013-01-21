@@ -32,7 +32,7 @@ setMethod(
     rdata[[Class]]=obj
     return(rdata)    
   }
-  )
+)
 
 setGeneric(
   name="writeToJSON",

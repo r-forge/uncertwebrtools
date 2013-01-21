@@ -1,20 +1,13 @@
+source('C:/subversion/Rforge_UncertWebTools/pkg/JsonXmlUncertWebTools/R/ClassParseJSON.R')
+source('C:/subversion/Rforge_UncertWebTools/pkg/JsonXmlUncertWebTools/R/ClassParseXML.R')
+source('C:/subversion/Rforge_UncertWebTools/pkg/JsonXmlUncertWebTools/R/ClassUncertainty.R')
+
 setClass(
   Class="NormalDistribution",
   representation=representation(mean="numeric", variance="numeric"),
   #validity=validND,
   contains="Uncertainty"
   )
-
-# setMethod(
-#   f="initialize",
-#   signature="NormalDistribution",
-#   definition=function(.Object, mean, variance){
-#     .Object@mean<-mean
-#     .Object@variance<-variance
-#     validObject(.Object)
-#     return(.Object)
-#   }
-#   )
 
 # setValidity(
 #   Class="NormalDistribution",

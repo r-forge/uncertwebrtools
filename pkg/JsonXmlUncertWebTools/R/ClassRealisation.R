@@ -1,6 +1,7 @@
 setClass(
   Class="Realisation",
-  representation=representation(value="numeric", id="numeric", weight="numeric")
+  representation=representation(value="numeric", id="numeric", weight="numeric"),
+  contains="Uncertainty"
   )
 
 setMethod(
