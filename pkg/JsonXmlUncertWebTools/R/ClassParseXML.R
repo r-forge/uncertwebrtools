@@ -1,5 +1,5 @@
 library("XML")
-library("xmlschemaReader")
+library("xmlschemaHelper")
 
 setClass(
   Class="parseXML",
