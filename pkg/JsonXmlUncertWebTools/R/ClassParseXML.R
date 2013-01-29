@@ -2,8 +2,7 @@ library("XML")
 library("xmlschemaHelper")
 
 setClass(
-  Class="parseXML",
-  representation=representation(xdata="list", rdata="list")
+  Class="parseXML"
   )
 
 setGeneric(
@@ -52,14 +51,28 @@ setMethod(
   )
 
 setGeneric(
+  name="writeToXML",
+  def=function(.Object, file, theXSDdoc){standardGeneric("writeToXML")}
+)
+
+setMethod(
+  f="writeToXML",
+  signature="parseXML",
+  definition=function(.Object, file, theXSDdoc){
+    data <- convertToXML(.Object, theXSDdoc)
+    write(toString(data), file)
+    
+  }
+)
+setGeneric(
   name="convertToXML",
-  def=function(.Object, file, theXSD){standardGeneric("convertToXML")}
+  def=function(.Object, theXSDdoc){standardGeneric("convertToXML")}
 )
 
 setMethod(
   f="convertToXML",
   signature="parseXML",
-  definition=function(.Object, file, theXSD){
+  definition=function(.Object, theXSDdoc){
     
     #TODO pass in the current node or buffer, not a whole file
     
@@ -67,55 +80,73 @@ setMethod(
     # TODO move this code outside when ready
 
     # Get the class name of the uncertainty type
-    className <- class(.Object)[[1]]
+    cN <- class(.Object)[[1]]
     
-    # Get the schema def from the xsd
-    o <- getAttributesAndElementsForElementName(className, "C:/subversion/Rforge_SchemaReader/extras/uncertml.xsd")
-    
-    library("XML")
-    
+    # Get the schema def from the xsd - will use the one that's been passed in
+    o <- getAttributesAndElementsForElementName(cN, "../../../../Rforge_XML_Schema_reader/extras/schema_document/uncertml.xsd")
+    #print(length(o$attributes))
     # Write out element with type and any attributes
     # Create element
+    
     data<-xmlNode(className, 
-                  attrs=c(xmlns="http://www.uncertml.org/2.0"))   
-    #TODO do namespace properly and add 'un:' if necessary - can specify namespace on xmlNode
-    
+                  attrs=c(xmlns="http://www.uncertml.org/2.0"))
     # For all attributes...
-    for (i in 1:length(o$attributes)){
-      # add attribute to element
-      aname <- o$attributes[[i]]$name
-      avalue <- to.character(slot(.Object,o$attributes[[i]]$name))
-      # At this point, can check all sort of things about min/max value, optional etc. TODO
-      addAttributes(data,aname=avalue)
-    }
-    
-    # For all sub-elements...
-    for (i in 1:length(o$subelements)){
-      # add sub-element to element
-      sname <- o$subelements[[i]]$name
+    if (length(o$attributes)>0)
+    {
       
-      # Keep checking for 'existsMethod' in case of nested Uncertainty types.
-      
-      if (existsMethod("convertToXML", typeof(slot(.Object,o$subelements[[i]]$name)))) {
-        
-        # write this one out and add it
-        se <- convertToXML(slot(.Object,o$subelements[[i]]$name), theXSDdoc, file)
-        addChildren(data, se)
-        
-      } else {
-        
-        svalue <- slot(.Object,o$subelements[[i]]$name)
-        # can be multiple...
-        # TODO this 'values' may change as UncertML becomes more atomic
-        # MAY need to format multiple values
-
+      for (i in 1:length(o$attributes)){
+        #print("a")
+        # add attribute to element
+        aname <- o$attributes[[i]]$name
+        avalue <- to.character(slot(.Object,o$attributes[[i]]$name))
+        #print("a2")
         # At this point, can check all sort of things about min/max value, optional etc. TODO
-        addChildren(data,newXMLNode(sname,svalue))
+        addAttributes(data,aname=avalue)
       }
     }
-    
-    write(toString(data), file)
-    detach("package:XML")
+ 
+    #TODO do namespace properly and add 'un:' if necessary - can specify namespace on xmlNode
+    print(length(o$subelements))
+    # For all sub-elements...
+    if (length(o$subelements)>0)
+    {
+      for (i in 1:length(o$subelements)){
+        # add sub-element to element
+        
+        sname <- o$subelements[[i]]$name
+        
+        # Keep checking for 'existsMethod' in case of nested Uncertainty types.
+        if (sname == "")
+        {
+          print("blank name")
+          if (existsMethod("convertToXML", typeof(slot(.Object,o$subelements[[i]]$type)))) {
+            
+            #temp
+            print("convertToXML exists")
+            print(o$subelements[[i]]$type)
+            #endtemp
+            
+            # write this one out and add it
+            se <- convertToXML(slot(.Object,o$subelements[[i]]$name), file, theXSDdoc)
+            data$addNode(se)
+            
+          }
+        } else {
+          
+          svalue <- slot(.Object,sname)
+          
+          # can be multiple...
+          # TODO this 'values' may change as UncertML becomes more atomic
+          # MAY need to format multiple values
+          
+          append.xmlNode(data, xmlNode(sname, as.character(svalue)))
+          #data$addNode(sname, as.character(svalue))
+          #temp
+          print (toString(data))
+          #end temp
+        }
+      }
+    }
        
   }
   )

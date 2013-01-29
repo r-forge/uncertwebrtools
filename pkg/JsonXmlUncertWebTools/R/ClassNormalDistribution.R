@@ -1,6 +1,4 @@
-source('C:/subversion/Rforge_UncertWebTools/pkg/JsonXmlUncertWebTools/R/ClassParseJSON.R')
-source('C:/subversion/Rforge_UncertWebTools/pkg/JsonXmlUncertWebTools/R/ClassParseXML.R')
-source('C:/subversion/Rforge_UncertWebTools/pkg/JsonXmlUncertWebTools/R/ClassUncertainty.R')
+source('ClassUncertainty.R')
 
 setClass(
   Class="NormalDistribution",

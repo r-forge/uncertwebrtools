@@ -1,8 +1,7 @@
-library("RJSONIO")
+library("rjson")
 
 setClass(
-  Class="parseJSON",
-  representation=representation(xdata="list", rdata="list")
+  Class="parseJSON"
 )
 
 setGeneric(
@@ -60,9 +59,7 @@ setMethod(
     signature="parseJSON",
     definition=function(.Object, file){
 
-      if (isValidJSON(file,FALSE)) {
-        
-        tempJSON<-fromJSON(file)
+        tempJSON<-fromJSON(paste(readLines(file)))
         
         className<-names(tempJSON)
         
@@ -93,10 +90,7 @@ setMethod(
           
         }
         return (.Object)
-      } else {
-        
-        # return an error message - not valid JSON
-      }
+      
     }
 )
 
